@@ -35,3 +35,18 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
                       bmHeader = TRUE)
 
 snp_sequence
+
+
+
+##############################################
+######### Write Session Info to file #########
+
+# Get current date and time
+current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
+
+# Create a unique file name using the current date and time
+file_name <- paste0("data/SessionInfo_", current_time, ".txt")
+
+# Capture the output of sessionInfo() and write it to a file
+writeLines(capture.output(sessionInfo()), file_name)
+
