@@ -17,7 +17,8 @@ snp_list <- c("rs3", "rs4")
 snp_mart<- useMart("ENSEMBL_MART_SNP", dataset = "hsapiens_snp")
 
 # Retrieve sequence and other data
-snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chrom_start", "chrom_end", "chrom_strand"), 
+snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "chrom_start", 
+                                     "chrom_end", "chrom_strand"), 
                       filters = c("snp_filter", "upstream_flank", "downstream_flank"), 
                       checkFilters = FALSE, 
                       values = list(snp_list, 10, 10), 
