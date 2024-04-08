@@ -9,12 +9,12 @@
 Example of output for two rsIDs, rs3 & rs4:
 
 ```
-  Variant name         Variant sequences Variant alleles Chromosome/scaffold position start (bp)
-1          rs3 CAAGAATAGG%C/T%ACATTTGGAT             C/T                                31872705
-2          rs4 AGGGTATTTA%A/G%TGCCACCCTA             A/G                                31873085
-  Chromosome/scaffold position end (bp) Strand
-1                              31872705      1
-2                              31873085      1
+  Variant name         Variant sequences Variant alleles Chromosome/scaffold name
+1          rs3 TTCAACAAGAATAGG%C/T%ACATT             C/T                       13
+2          rs4 TCCGTAGGGTATTTA%A/G%TGCCA             A/G                       13
+  Chromosome/scaffold position start (bp) Chromosome/scaffold position end (bp) Strand
+1                                31872705                              31872705      1
+2                                31873085                              31873085      1
 ```
 ## Installation
 
