@@ -1,7 +1,7 @@
 # Retrieve flanking sequences of rsID, upstream and downstream
 # Reference: https://support.bioconductor.org/p/89688/
 # Reference: https://chat.openai.com/share/7e2ec69e-a377-4564-a525-0c9e96647499
-# NOTE: dataset = "hsapiens_snp" uses GRCh38.p14, do 'listDatasets(snp_mart)
+# NOTE: dataset = "hsapiens_snp" uses genome build GRCh38.p14, do 'listDatasets(snp_mart)
 
 # install biomaRt
 if (!require("BiocManager", quietly = TRUE))
@@ -10,6 +10,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("biomaRt")
 
 library(biomaRt)
+library(dplyr)
 
 # 1.1) Input list of query rsIDs
 # Simple
@@ -38,7 +39,14 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
 snp_sequence
 
 
-#5) Write dataframe "snp_sequence" to CSV file
+# 5) Add new column with genome build, GRCh38.p14 (see notes above).
+
+snp_sequence <- snp_sequence %>%
+  mutate(`Genome Build` = "GRCh38.p14") %>%
+  relocate(`Genome Build`, .before = Strand)
+
+
+# 6) Write dataframe "snp_sequence" to CSV file
 
 # Get current date and time to use for unique filename
 current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
