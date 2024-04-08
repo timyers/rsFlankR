@@ -6,3 +6,8 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Mac OSX
+.DS_Store
+/doc/
+/Meta/
