@@ -37,13 +37,16 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
 snp_sequence
 
 
-#5) Write dataframe "snp_sequence" to csv file
+#5) Write dataframe "snp_sequence" to CSV file
 
 # Get current date and time to use for unique filename
 current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
+# Create length of "snp_list" to use in "file_name" below
+snp_list_length <- length(snp_list)
+
 # Create a unique file name using the current date and time
-file_name <- paste0("data/output/snp_sequence_", up_stream, "_", down_stream, "_", current_time, ".csv")
+file_name <- paste0("data/output/snp_sequence_", snp_list_length, "_", up_stream, "_", down_stream, "_", current_time, ".csv")
 
 # Write the dataframe "snp_sequence" to a CSV file called "file_name"
 write.csv(snp_sequence, file = file_name, row.names = FALSE)
