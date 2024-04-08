@@ -51,16 +51,3 @@ file_name <- paste0("data/output/snp_sequence_", snp_list_length, "_", up_stream
 
 # Write the dataframe "snp_sequence" to a CSV file called "file_name"
 write.csv(snp_sequence, file = file_name, row.names = FALSE)
-
-##############################################
-######### Write Session Info to file #########
-
-# Get current date and time
-current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
-
-# Create a unique file name using the current date and time
-file_name <- paste0("data/SessionInfo_", current_time, ".txt")
-
-# Capture the output of sessionInfo() and write it to a file
-writeLines(capture.output(sessionInfo()), file_name)
-
