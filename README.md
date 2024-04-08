@@ -6,12 +6,12 @@
 
 `rsFlankR` is an R project used to retrieve the upstream and downstream flanking sequences from a list of rsIDs along with additional misceallenous data about the SNP.  The output will be used to create target sequences for designing Luciferase assays.  This projected was initially created for an internal renal cancer research project, 2023-2024.
 
-Example of output for two rsIDs, rs3 & rs4:
+Example of output of 10 bps of the flanking upstream and downstream sequences for two rsIDs, rs3 & rs4:
 
 ```
   Variant name         Variant sequences Variant alleles Chromosome/scaffold name
-1          rs3 TTCAACAAGAATAGG%C/T%ACATT             C/T                       13
-2          rs4 TCCGTAGGGTATTTA%A/G%TGCCA             A/G                       13
+1          rs3 CAAGAATAGG%C/T%ACATTTGGAT             C/T                       13
+2          rs4 AGGGTATTTA%A/G%TGCCACCCTA             A/G                       13
   Chromosome/scaffold position start (bp) Chromosome/scaffold position end (bp) Strand
 1                                31872705                              31872705      1
 2                                31873085                              31873085      1
