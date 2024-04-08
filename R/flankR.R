@@ -1,4 +1,4 @@
-# Retrieve flanking sequences of rsID, 20 bp upstream and downstream
+# Retrieve flanking sequences of rsID, upstream and downstream
 # Reference: https://support.bioconductor.org/p/89688/
 # Reference: https://chat.openai.com/share/7e2ec69e-a377-4564-a525-0c9e96647499
 # NOTE: dataset = "hsapiens_snp" uses GRCh38.p14, do 'listDatasets(snp_mart)
