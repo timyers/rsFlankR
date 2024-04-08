@@ -9,8 +9,10 @@ if (!require("BiocManager", quietly = TRUE))
 
 BiocManager::install("biomaRt")
 
+# Load libraries
 library(biomaRt)
 library(dplyr)
+
 
 # 1.1) Input list of query rsIDs
 # Simple
