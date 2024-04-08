@@ -15,7 +15,7 @@ library(biomaRt)
 # Simple
 snp_list <- c("rs3", "rs4")
 
-# 1.2) Input list of query rsIDs
+# 1.2) Input list of query rsIDs for this project.
 snp_list <- readLines("data/input/rcc_snps_39.txt")
 
 # 2) Input number of flanking sequences to retrieve
