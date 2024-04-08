@@ -19,8 +19,8 @@ snp_list <- c("rs3", "rs4")
 snp_list <- readLines("data/input/rcc_snps_39.txt")
 
 # 2) Input number of flanking sequences to retrieve
-up_stream <- 15
-down_stream <- 5
+up_stream <- 10
+down_stream <- 10
 
 # 3) Select database
 snp_mart<- useMart("ENSEMBL_MART_SNP", dataset = "hsapiens_snp")
