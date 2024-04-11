@@ -18,6 +18,8 @@ library(dplyr)
 # Simple
 snp_list <- c("rs3", "rs4")
 
+# or
+
 # 1.2) Input list of query rsIDs for this project.
 # Read list of SNP rsIDs from text file
 snp_list <- readLines("data/input/rcc_snps_39.txt")
