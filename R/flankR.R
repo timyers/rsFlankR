@@ -12,11 +12,13 @@ BiocManager::install("biomaRt")
 # Load libraries
 library(biomaRt)
 library(dplyr)
+library(tidyverse)
 
 
 # 1.1) Input list of query rsIDs
 # Simple
-snp_list <- c("rs3", "rs4")
+# snp_list <- c("rs3", "rs4")
+snp_list <- c("rs6466948", "rs4732060")
 
 # or
 
@@ -43,7 +45,24 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
 snp_sequence
 
 
-# 5) Add new column with genome build, GRCh38.p14 (see notes above).
+# 5) Separate the 'Variant sequences' column into three new columns
+snp_sequence <- snp_sequence %>%
+  tidyr::separate(col = "Variant sequences", 
+                  into = c("Upstream", "Alleles", "Downstream"), 
+                  sep = "%"
+                 )
+
+# 6) Concatenate the upstream and downstream sequences with each allele
+snp_sequence_expanded <- snp_sequence %>%
+                         mutate(Alleles = str_split(Alleles, "/")) %>%
+                         unnest(Alleles) %>%
+                         mutate(Full_target_sequence = paste0(Upstream, Alleles, Downstream))
+
+snp_sequence_expanded
+
+
+
+# 7) Add new column with genome build, GRCh38.p14 (see notes above).
 
 snp_sequence <- snp_sequence %>%
   mutate(`Genome Build` = "GRCh38.p14") %>%
