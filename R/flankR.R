@@ -1,4 +1,5 @@
-# Retrieve flanking sequences of rsID, upstream and downstream
+# Retrieve flanking sequences of rsID, upstream and downstream to
+# create oligos for LUCiferase assays.
 # Reference: https://support.bioconductor.org/p/89688/
 # Reference: https://chat.openai.com/share/7e2ec69e-a377-4564-a525-0c9e96647499
 # NOTE: dataset = "hsapiens_snp" uses genome build GRCh38.p14, do 'listDatasets(snp_mart)
@@ -45,14 +46,21 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
 snp_sequence
 
 
-# 5) Separate the 'Variant sequences' column into three new columns
+# 5) Add new column with genome build, GRCh38.p14 (see notes above).
+
+snp_sequence <- snp_sequence %>%
+  mutate(`Genome Build` = "GRCh38.p14") %>%
+  relocate(`Genome Build`, .before = Strand)
+
+
+# 6) Separate the 'Variant sequences' column into three new columns
 snp_sequence <- snp_sequence %>%
   tidyr::separate(col = "Variant sequences", 
                   into = c("Upstream", "Alleles", "Downstream"), 
                   sep = "%"
                  )
 
-# 6) Concatenate the upstream and downstream sequences with each allele
+# 7) Concatenate the upstream and downstream sequences with each allele
 snp_sequence_expanded <- snp_sequence %>%
                          mutate(Alleles = str_split(Alleles, "/")) %>%
                          unnest(Alleles) %>%
@@ -61,15 +69,10 @@ snp_sequence_expanded <- snp_sequence %>%
 snp_sequence_expanded
 
 
-
-# 7) Add new column with genome build, GRCh38.p14 (see notes above).
-
-snp_sequence <- snp_sequence %>%
-  mutate(`Genome Build` = "GRCh38.p14") %>%
-  relocate(`Genome Build`, .before = Strand)
+# 8) These are the `Forward Orientation` sequences 
 
 
-# 6) Write dataframe "snp_sequence" to CSV file
+# 9) Write dataframe "snp_sequence" to CSV file
 
 # Get current date and time to use for unique filename
 current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
@@ -81,4 +84,4 @@ snp_list_length <- length(snp_list)
 file_name <- paste0("data/output/snp_sequence_", snp_list_length, "_", up_stream, "_", down_stream, "_", current_time, ".csv")
 
 # Write the dataframe "snp_sequence" to a CSV file called "file_name"
-write.csv(snp_sequence, file = file_name, row.names = FALSE)
+write.csv(snp_sequence_expanded, file = file_name, row.names = FALSE)
