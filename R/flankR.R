@@ -14,6 +14,7 @@ BiocManager::install("biomaRt")
 library(biomaRt)
 library(dplyr)
 library(tidyverse)
+library(stringi)
 
 
 # 1.1) Input list of query rsIDs
@@ -69,10 +70,26 @@ snp_sequence_expanded <- snp_sequence %>%
 snp_sequence_expanded
 
 
-# 8) These are the `Forward Orientation` sequences 
+# 8) These are the `Forward Orientation` sequences. Add column to label.
+snp_sequence_expanded <- snp_sequence_expanded %>%
+  mutate(`Orientation` = "Forward") 
 
 
-# 9) Write dataframe "snp_sequence" to CSV file
+# 9) Duplicate rows and modify with `Reverse` Orientation of `Full_target_sequence`
+snp_sequence_modified <- snp_sequence_expanded %>%
+  # Ensure Orientation is set correctly before starting
+  mutate(Orientation = "Forward") %>%
+  # Create duplicate rows with modifications
+  slice(rep(1:n(), each = 2)) %>%
+  # Apply conditions to modify only the duplicated rows
+  mutate(
+    Full_target_sequence = if_else(row_number() %% 2 == 0, stringi::stri_reverse(Full_target_sequence), Full_target_sequence),
+    Orientation = if_else(row_number() %% 2 == 0, "Reverse", "Forward")
+  )
+
+
+
+# 10) Write dataframe "snp_sequence" to CSV file
 
 # Get current date and time to use for unique filename
 current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
