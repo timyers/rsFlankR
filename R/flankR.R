@@ -19,8 +19,8 @@ library(stringi)
 
 # 1.1) Input list of query rsIDs
 # Simple
-# snp_list <- c("rs3", "rs4")
-snp_list <- c("rs6466948", "rs4732060")
+# snp_list <- c("rs3", "rs4")  ## Used for simple tests
+snp_list <- c("rs6466948", "rs4732060")  ## also used for simple tests
 
 # or
 
