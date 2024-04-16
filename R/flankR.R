@@ -1,5 +1,5 @@
 # Retrieve flanking sequences of rsID, upstream and downstream to
-# create oligos for LUCiferase assays.
+# create Duplex Oligos as ordered from IDT for LUCiferase assays.
 # Reference: https://support.bioconductor.org/p/89688/
 # Reference: https://chat.openai.com/share/7e2ec69e-a377-4564-a525-0c9e96647499
 # NOTE: dataset = "hsapiens_snp" uses genome build GRCh38.p14, do 'listDatasets(snp_mart)
@@ -86,7 +86,6 @@ snp_sequence_modified <- snp_sequence_expanded %>%
     Full_target_sequence = if_else(row_number() %% 2 == 0, stringi::stri_reverse(Full_target_sequence), Full_target_sequence),
     Orientation = if_else(row_number() %% 2 == 0, "Reverse", "Forward")
   )
-
 
 
 # 10) Write dataframe "snp_sequence" to CSV file
