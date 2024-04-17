@@ -17,7 +17,7 @@ library(dplyr)
 library(tidyverse)
 library(stringi)
 
-# Input SNPs of interest
+# 1) Input SNPs of interest
 ## 1.1) Input list of query rsIDs
   ## Simple
 ### snp_list <- c("rs3", "rs4")  ## Used for simple tests
@@ -29,7 +29,7 @@ snp_list <- c("rs6466948", "rs4732060")  ## also used for simple tests
   ## Read list of SNP rsIDs from text file
 snp_list <- readLines("data/input/rcc_snps_39.txt")
 
-# 2) Input addition information (required)
+# 2) Input additional information (required)
 ## 2.1) Enter number of flanking sequences to retrieve
 up_stream <- 10
 down_stream <- 10
@@ -41,6 +41,8 @@ down_stream <- 10
   ## Takara In-Fusion Snap Assembly (Cat. # 638946) which requires
   ## a 15-bp homologous overlap with the vector ends to which it
   ## will be cloned.
+overlap_seq_begin <- "GCTCGCTAGCCTCGA"
+overlap_seq_last <- "GATCTGGCCTCGGCG"
 
 # 3) Select database
 snp_mart<- useMart("ENSEMBL_MART_SNP", dataset = "hsapiens_snp")
@@ -55,7 +57,6 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
                       bmHeader = TRUE)
 
 snp_sequence
-
 
 # 5) Add new column with genome build, GRCh38.p14 (see notes above).
 
@@ -84,8 +85,15 @@ snp_sequence_expanded
 snp_sequence_expanded <- snp_sequence_expanded %>%
   mutate(`Orientation` = "Forward") 
 
+# 9) Add two columns with 15-bp overlapping sequences (see notes in 2.2)
+snp_sequence_expanded <- snp_sequence_expanded %>%
+      mutate(`Overlap_beg` = overlap_seq_begin) %>%
+      relocate(`Overlap_beg`, .before = Full_target_sequence) %>%
+      mutate(`Overlap_last` = overlap_seq_last) %>%
+      relocate(`Overlap_last`, .before = Orientation)
 
-# 9) Duplicate rows and modify with `Reverse` Orientation of `Full_target_sequence`
+
+# 10) Duplicate rows and modify with `Reverse` Orientation of `Full_target_sequence`
 snp_sequence_modified <- snp_sequence_expanded %>%
   # Ensure Orientation is set correctly before starting
   mutate(Orientation = "Forward") %>%
@@ -98,7 +106,15 @@ snp_sequence_modified <- snp_sequence_expanded %>%
   )
 
 
-# 10) Write dataframe "snp_sequence" to CSV file
+# 11) Concatenate 'Overlap_beg', 'Full_target_sequence', and
+# 'Overlap_last' to get the 'Full_sequence_to_order' from IDT
+
+snp_sequence_modified <- snp_sequence_modified %>%
+    mutate(Full_sequence_to_order = paste0(Overlap_beg, Full_target_sequence, Overlap_last)) %>%
+    relocate(`Full_sequence_to_order`, .before = Orientation)
+
+
+# 12) Write dataframe "snp_sequence" to CSV file
 
 # Get current date and time to use for unique filename
 current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
