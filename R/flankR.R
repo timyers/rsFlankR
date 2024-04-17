@@ -1,5 +1,6 @@
 # Retrieve flanking sequences of rsID, upstream and downstream to
-# create Duplex Oligos as ordered from IDT for LUCiferase assays.
+# create Duplex Oligos as ordered from IDT for LUCiferase assays which.
+# will be used for Luciferase Assays.
 # Reference: https://support.bioconductor.org/p/89688/
 # Reference: https://chat.openai.com/share/7e2ec69e-a377-4564-a525-0c9e96647499
 # NOTE: dataset = "hsapiens_snp" uses genome build GRCh38.p14, do 'listDatasets(snp_mart)
@@ -16,21 +17,30 @@ library(dplyr)
 library(tidyverse)
 library(stringi)
 
-
-# 1.1) Input list of query rsIDs
-# Simple
-# snp_list <- c("rs3", "rs4")  ## Used for simple tests
+# Input SNPs of interest
+## 1.1) Input list of query rsIDs
+  ## Simple
+### snp_list <- c("rs3", "rs4")  ## Used for simple tests
 snp_list <- c("rs6466948", "rs4732060")  ## also used for simple tests
 
-# or
+## or
 
-# 1.2) Input list of query rsIDs for this project.
-# Read list of SNP rsIDs from text file
+## 1.2) Input list of query rsIDs for this project .
+  ## Read list of SNP rsIDs from text file
 snp_list <- readLines("data/input/rcc_snps_39.txt")
 
-# 2) Input number of flanking sequences to retrieve
+# 2) Input addition information (required)
+## 2.1) Enter number of flanking sequences to retrieve
 up_stream <- 10
 down_stream <- 10
+
+## 2.2) Enter additional overlapping sequences (required).
+  ## For the "Winter" RCC project, we will be double digesting the
+  ## Luciferase Vector (pGL4.23) with XhoI and BglII and cloning
+  ## the duplex oligos (ordered from IDT) into the vector using the
+  ## Takara In-Fusion Snap Assembly (Cat. # 638946) which requires
+  ## a 15-bp homologous overlap with the vector ends to which it
+  ## will be cloned.
 
 # 3) Select database
 snp_mart<- useMart("ENSEMBL_MART_SNP", dataset = "hsapiens_snp")
