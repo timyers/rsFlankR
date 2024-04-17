@@ -21,7 +21,8 @@ library(stringi)
 ## 1.1) Input list of query rsIDs
   ## Simple
 ### snp_list <- c("rs3", "rs4")  ## Used for simple tests
-snp_list <- c("rs6466948", "rs4732060")  ## also used for simple tests
+### snp_list <- c("rs6466948", "rs4732060")  ## also used for simple tests
+snp_list <- c("rs112542693", "rs41277720") ## Selected SNPs to use for a Pilot Test.
 
 ## or
 
@@ -56,7 +57,7 @@ snp_sequence <- getBM(attributes = c("refsnp_id", "snp", "allele", "chr_name", "
                       mart = snp_mart, 
                       bmHeader = TRUE)
 
-snp_sequence
+# snp_sequence
 
 # 5) Add new column with genome build, GRCh38.p14 (see notes above).
 
@@ -78,7 +79,7 @@ snp_sequence_expanded <- snp_sequence %>%
                          unnest(Alleles) %>%
                          mutate(Full_target_sequence = paste0(Upstream, Alleles, Downstream))
 
-snp_sequence_expanded
+# snp_sequence_expanded
 
 
 # 8) These are the `Forward Orientation` sequences. Add column to label.
@@ -133,4 +134,4 @@ snp_list_length <- length(snp_list)
 file_name <- paste0("data/output/snp_sequence_", snp_list_length, "_", up_stream, "_", down_stream, "_", current_time, ".csv")
 
 # Write the dataframe "snp_sequence" to a CSV file called "file_name"
-write.csv(snp_sequence_expanded, file = file_name, row.names = FALSE)
+write.csv(snp_sequence_final, file = file_name, row.names = FALSE)
