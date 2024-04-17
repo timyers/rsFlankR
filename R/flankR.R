@@ -87,8 +87,8 @@ snp_sequence_expanded <- snp_sequence_expanded %>%
 
 # 9) Add two columns with 15-bp overlapping sequences (see notes in 2.2)
 snp_sequence_expanded <- snp_sequence_expanded %>%
-      mutate(`Overlap_beg` = overlap_seq_begin) %>%
-      relocate(`Overlap_beg`, .before = Full_target_sequence) %>%
+      mutate(`Overlap_begin` = overlap_seq_begin) %>%
+      relocate(`Overlap_begin`, .before = Full_target_sequence) %>%
       mutate(`Overlap_last` = overlap_seq_last) %>%
       relocate(`Overlap_last`, .before = Orientation)
 
@@ -106,15 +106,22 @@ snp_sequence_modified <- snp_sequence_expanded %>%
   )
 
 
-# 11) Concatenate 'Overlap_beg', 'Full_target_sequence', and
+# 11) Concatenate 'Overlap_begin', 'Full_target_sequence', and
 # 'Overlap_last' to get the 'Full_sequence_to_order' from IDT
 
 snp_sequence_modified <- snp_sequence_modified %>%
-    mutate(Full_sequence_to_order = paste0(Overlap_beg, Full_target_sequence, Overlap_last)) %>%
+    mutate(Full_sequence_to_order = paste0(Overlap_begin, Full_target_sequence, Overlap_last)) %>%
     relocate(`Full_sequence_to_order`, .before = Orientation)
 
+# 12) Add column with a name for the oligo that includes the 
+# 'Variant name' (rsID), 'Allele', and 'Orientation'
 
-# 12) Write dataframe "snp_sequence" to CSV file
+snp_sequence_final <- snp_sequence_modified %>%
+    mutate(Oligo_Name = paste(`Variant name`, Alleles, Orientation, sep = "_")) %>%
+    relocate(Oligo_Name, .before = `Variant name`)
+
+    
+# 13) Write "snp_sequence_final" to CSV file
 
 # Get current date and time to use for unique filename
 current_time <- format(Sys.time(), "%Y%m%d_%H%M%S")
